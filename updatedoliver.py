@@ -17,7 +17,7 @@ ENTRY_BG = "white"
 
 #layout
 main = Tk()
-main.geometry("1000x1000")
+main.geometry("500x500")
 main.title("Aplikasi mcdonald")
 main.configure(bg=BG_COLOR)
 
