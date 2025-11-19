@@ -161,12 +161,19 @@ def show_page(p):
     p.pack(fill="both", expand=1)
 
 
+
+
+
+
 #save button
 def save_data():
     data = get_data()
     if not isinstance(data, dict):
         return
     try:
+        # ERROR: Key mismatch — `save_data()` expects `data["system"]` below,
+        # but `get_data()` returns a dict with the key `'sys'` (see return).
+        # This is a definite runtime KeyError if `get_data()` is used.
         c.execute("INSERT INTO chicken (name, age, gender, height, weight, sys) VALUES (%s,%s,%s,%s,%s,%s)", (data["name"], data["age"], data["gender"], data["height"], data["weight"], data["system"]),)
         connection.commit()
         mb.showinfo("Success", "mcdonald registered successfully")
@@ -175,6 +182,10 @@ def save_data():
     except Exception as e:
         connection.rollback()
         mb.showerror("Database error", f"Failed to save data: {e}")
+
+
+
+
 
 
 #clear button
@@ -270,11 +281,27 @@ def get_data():
     except ValueError:
         mb.showerror("Error", "Weight must be a positive number")
         return
+
+
+
+
     
     chicken_system = entry_system.get().upper().strip()
+    # ERROR: Case-mismatch — `chicken_system` is converted to UPPERCASE,
+    # but `SYSTEM` contains lowercase strings (e.g. 'mcchicken'). This
+    # comparison will always fail and thus this is a definite logic error
+    # in the current code (the check will always trigger the error path).
     if chicken_system not in SYSTEM:
         mb.showerror("Error", "Invalid coCK")
         return
+
+
+
+
+    
+
+
+
     
     return {
         "name": chicken_name,
@@ -282,8 +309,15 @@ def get_data():
         "gender": chicken_gender,
         "height": chicken_height,
         "weight": chicken_weight,
+        # ERROR: Returned dict key is 'sys' but `save_data()` uses the key
+        # 'system' (see `data["system"]` in `save_data`). This definite
+        # mismatch will cause a KeyError when saving. (Do not change code.)
         "sys": chicken_system
     }
+
+
+
+
 
 
 #delete
