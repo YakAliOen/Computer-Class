@@ -1,0 +1,2 @@
+Radiobutton(main, text='Male', variable=GenderEntry, value="Male").grid(row=2, column=1, sticky='W')
+Radiobutton(main, text='Female', variable=GenderEntry, value="Female").grid(row=3, column=1, sticky='W')
